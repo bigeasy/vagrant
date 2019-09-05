@@ -1,0 +1,61 @@
+---
+
+- name: run the playbook tasks on the localhost
+  hosts: localhost
+  become: yes
+
+  vars:
+    pip_install_packages:
+      - name: awscli
+
+  tasks:
+
+  - name: create US English locale
+    locale_gen:
+      name: en_US.UTF-8
+      state: present
+
+  - name: add node key
+    apt_key:
+      url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+      state: present
+
+  - name: add node repo
+    apt_repository:
+      repo: deb https://deb.nodesource.com/node_12.x bionic main
+      state: present
+
+  - name: add docker key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: add docker repo
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable
+      state: present
+
+  - name: apt update
+    become: true
+    apt:
+      cache_valid_time: 86400
+      update_cache: yes
+      upgrade: full
+
+  - name: install docker
+    apt: name=docker-ce state=present
+
+  - name: install node
+    apt: name=nodejs state=present
+
+  - name: install postgresql client
+    apt: name=postgresql-client state=present
+
+  - name: add vagrant to docker group
+    user:
+      name: vagrant
+      groups: docker
+      state: present
+
+  - include_role:
+      name: geerlingguy.pip
