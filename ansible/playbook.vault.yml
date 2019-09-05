@@ -2,18 +2,7 @@
   name: install terraform
   become: yes
   tasks:
-  - name: check if vault exists
-    stat:
-      path: /usr/local/bin/vault
-    register: hashicorp_exists
-  - name: check vault version
-    shell: vault -v
-    register: hashicorp_version
-    when: hashicorp_exists.stat.exists
-    changed_when: not hashicorp_version.stdout.endswith('1.2.2')
-  - name: vault install
-    unarchive:
-      src: https://releases.hashicorp.com/vault/1.2.2/vault_1.2.2_linux_amd64.zip
-      dest: /usr/local/bin
-      remote_src: True
-    when: not (hashicorp_exists.stat.exists or hashicorp_version.stdout.endswith('1.2.2'))
+  - include_tasks: include.hashicorp.yml
+    vars:
+      product: vault
+      version: 1.2.2

@@ -1,0 +1,17 @@
+- name: check if {{ product }} exists
+  stat:
+    path: /usr/local/bin/{{ product }}
+  register: hashicorp_exists
+- name: check {{ product }} version
+  # Curly at the start of a line looks like a dict, so we quote it.
+  shell: "{{ product }} -v"
+  register: hashicorp_version
+  when: hashicorp_exists.stat.exists
+  changed_when: not hashicorp_version.stdout.endswith('v' + version)
+# Curly at the start of a line looks like a dict, so we quote it.
+- name: "{{ product }} install"
+  unarchive:
+    src: https://releases.hashicorp.com/{{ product }}/{{ version }}{{ product }}_{{ version }}_linux_amd64.zip
+    dest: /usr/local/bin
+    remote_src: True
+  when: not (hashicorp_exists.stat.exists or hashicorp_version.stdout.endswith('v' + version))
