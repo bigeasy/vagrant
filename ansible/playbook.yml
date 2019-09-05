@@ -7,6 +7,7 @@
   vars:
     pip_install_packages:
       - name: awscli
+      - name: magic-wormhole
 
   tasks:
 
@@ -51,11 +52,17 @@
   - name: install postgresql client
     apt: name=postgresql-client state=present
 
+  - name: install ntpd
+    apt: name=ntp state=present
+
   - name: add vagrant to docker group
     user:
       name: vagrant
       groups: docker
       state: present
+
+  - name: install magic wormhole build dependencies
+    apt: name=libffi-dev state=present
 
   - include_role:
       name: geerlingguy.pip
