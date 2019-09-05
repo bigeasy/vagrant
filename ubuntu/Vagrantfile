@@ -1,9 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'yaml'
+
+
+# Allow to define the config file via env variable
+config_file = ENV['VAGRANT_CONFIG_YAML'] || 'vagrant.yaml'
+
+# Read the config file
+if File.file?(config_file)
+    options = YAML.load_file(config_file)
+else
+    abort("ERROR: Can not read the Vagrant YAML configuration from %s." % config_file)
+end
 
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/disco64"
-  config.disksize.size = '128GB'
+  config.disksize.size = options['diskSize']
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
     vb.name = "ubuntu"
