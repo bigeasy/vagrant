@@ -4,11 +4,6 @@
   hosts: localhost
   become: yes
 
-  vars:
-    pip_install_packages:
-      - name: awscli
-      - name: magic-wormhole
-
   tasks:
 
   - name: create US English locale
@@ -64,5 +59,8 @@
   - name: install magic wormhole build dependencies
     apt: name=libffi-dev state=present
 
-  - include_role:
-      name: geerlingguy.pip
+  - name: install awscli
+    pip: name=awscli
+
+  - name: install magic-wormhole
+    pip: name=magic-wormhole
