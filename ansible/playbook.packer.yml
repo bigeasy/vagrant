@@ -1,0 +1,9 @@
+- hosts: all
+  name: install terraform
+  become: yes
+  tasks:
+  - include_tasks: include.hashicorp.yml
+    vars:
+      product: packer
+      version: 1.4.3
+
