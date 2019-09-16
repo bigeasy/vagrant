@@ -1,3 +1,5 @@
+- name: install unzip
+  apt: name=unzip state=present
 - name: check if {{ product }} exists
   stat:
     path: /usr/local/bin/{{ product }}
