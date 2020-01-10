@@ -18,10 +18,10 @@ Vagrant.configure("2") do |config|
   config.disksize.size = options['diskSize']
   config.vm.provider "virtualbox" do |vb|
     vb.memory = "1024"
-    vb.name = "ubuntu"
+    vb.name = options["name"] || "ubuntu"
     vb.customize [ "guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000 ]
   end
-  config.ssh.forward_agent = true
+  config.ssh.forward_agent = options["forwardAgent"].nil? ? true : options["forwardAgent"]
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     # Any bad news and we exit.
     set -e

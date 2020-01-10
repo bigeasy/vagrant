@@ -1,1 +1,3 @@
 diskSize: '32GB'
+portForward: false
+name: 'packet'
