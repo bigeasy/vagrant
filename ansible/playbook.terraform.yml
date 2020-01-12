@@ -5,4 +5,4 @@
   - include_tasks: include.hashicorp.yml
     vars:
       product: terraform
-      version: 0.12.8
+      version: 0.12.19
